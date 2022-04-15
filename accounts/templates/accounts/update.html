@@ -1,10 +1,10 @@
 {% extends 'base.html' %}
-
+{% load bootstrap5 %}
 {% block content %}
 
   <form action="{% url 'accounts:update' %}" method='POST'>
     {% csrf_token %}
-    {{ form }}
+    {% bootstrap_form form %}
       <input type="submit" class="btn btn-primary">
     </form>
     <a href="{% url 'movies:index' %}" class="btn btn-warning">back</a>

@@ -25,7 +25,7 @@
   <form action="{% url 'movies:comments_create' movie.pk %}" method="POST">
     {% csrf_token %}
     {{ comment_form }}
-    <input type="submit">
+    <input type="submit" class="btn btn-primary">
   </form>
     <form action="{% url 'movies:delete' movie.pk %}" method="POST">
       {% csrf_token %}
