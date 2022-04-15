@@ -11,38 +11,38 @@
 
   <body>
 
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light d-flex justify-content-between">
       <div class="container-fluid">
         <a class="navbar-brand" href="#">{{ user }}</a>
       {% if request.user.is_authenticated%}
-        <div class="collapse navbar-collapse" id="navbarNav">
-          <ul class="navbar-nav">
-            <li class="nav-item">
-              <a href="{% url 'accounts:update' %}" class="btn btn-info">회원 정보 수정</a>
-            </li>
-            <li class="nav-item">
-              <form action="{% url 'accounts:logout' %}" method='POST'>
-                {% csrf_token %}
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a href="{% url 'accounts:update' %}" class="btn btn-info">회원 정보 수정</a>
+          </li>
+          <li class="nav-item">
+            <form action="{% url 'accounts:logout' %}" method='POST'>
+              {% csrf_token %}
 
-                <input type="submit" value='logout' class="btn btn-danger">
-              </form>
-            </li>
-            <li calss="nav-item">
-              <a href="{% url 'accounts:delete' %}" class="btn btn-danger"> 회원 탈퇴 </a>
-            </li>
-          </ul>
-        </div>
+              <input type="submit" value='logout' class="btn btn-danger">
+            </form>
+          </li>
+          <li calss="nav-item">
+            <a href="{% url 'accounts:delete' %}" class="btn btn-danger"> 회원 탈퇴 </a>
+          </li>
+        </ul>
+      </div>
       {% else %}
-        <div class="collapse navbar-collapse" id="navbarNav">
-          <ul class="navbar-nav">
-            <li class="nav-item">
-              <a href="{% url 'accounts:login' %}" class="btn btn-info"> 로그인 </a>
-            </li>
-            <li class="nav-item">
-              <a href="{% url 'accounts:signup' %}" class="btn btn-primary">회원가입</a>
-            </li>
-          </ul>
-        </div>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a href="{% url 'accounts:login' %}" class="btn btn-info"> 로그인 </a>
+          </li>
+          <li class="nav-item">
+            <a href="{% url 'accounts:signup' %}" class="btn btn-primary">회원가입</a>
+          </li>
+        </ul>
+      </div>
       {% endif %}
       </div>
     </nav>
