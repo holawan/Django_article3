@@ -54,4 +54,3 @@ def detail(request,pk) :
     }
 
     return render(request, 'movies/detail.html',context)
-
