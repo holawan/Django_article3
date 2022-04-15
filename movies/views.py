@@ -1,12 +1,14 @@
 from django.shortcuts import get_object_or_404, render, redirect
+from django.views.decorators.http import require_http_methods, require_POST,require_safe
+from django.contrib.auth.decorators import login_required
 
 from movies.forms import MovieForm,CommentForm
 from .models import Movie,Comment
 # Create your views here.
 
-
+@require_safe
 def index(request) :
-    movies = Movie.objects.all()
+    movies = Movie.objects.order_by('-pk')
 
     context = {
 
@@ -14,30 +16,37 @@ def index(request) :
     }
 
     return render(request,'movies/index.html',context)
-
+@login_required
 def create(request):
     if request.method=='POST':
         form = MovieForm(request.POST)
         if form.is_valid():
-            movie = form.save()
+            movie = form.save(commit=False)
+            movie.user = request.user
+
             movie.save()
-            return redirect('movies:index')
-    form = MovieForm()
+            return redirect('movies:detail',movie.pk)
+    else :
+        form = MovieForm()
     context = {
         'form' : form
     }
     return render(request,'movies/create.html', context)
-
+@login_required
+@require_http_methods(['GET','POST'])
 def update(request,pk):
     movie = get_object_or_404(Movie, pk=pk)
-    # if request.method=='POST':
-
-    #     form = MovieForm(request.POST, instance=movie)
-    #     if form.is_valid():
-    #         movie = form.save()
-    #         movie.save()
-    #         return redirect('movies:index')
-    form = MovieForm(instance=movie)
+    if request.user == movie.user :
+        if request.method=='POST':
+            form = MovieForm(request.POST, instance=movie)
+            if form.is_valid():
+                movie = form.save()
+                movie.save()
+                return redirect('movies:detail',movie.pk)
+        else :
+            form = MovieForm(instance=movie)
+    else :
+        return redirect('movies:index')
     context = {
         'form' : form,
         'movie' : movie
@@ -45,7 +54,7 @@ def update(request,pk):
     return render(request,'movies/update.html', context)    
 
 
-
+@require_safe
 def detail(request,pk) :
     movie = get_object_or_404(Movie,pk=pk) 
     comment_form = CommentForm()
@@ -58,26 +67,33 @@ def detail(request,pk) :
 
     return render(request, 'movies/detail.html',context)
 
-
+@require_POST
 def delete(request,pk) :
     movie = get_object_or_404(Movie,pk=pk)
-    movie.delete()
+    if request.user.is_authenticated :
+        if request.user == movie.user :
+            movie.delete()
     return redirect('movies:index')
 
-
+@require_POST
 def comments_create(request,pk) :
-    movie = get_object_or_404(Movie,pk=pk)
-    comment_form = CommentForm(request.POST)
+    if request.user.is_authenticated : 
+            
+        movie = get_object_or_404(Movie,pk=pk)
+        comment_form = CommentForm(request.POST)
 
-    if comment_form.is_valid() :
-        comment = comment_form.save(commit=False) 
-        comment.movie = movie
-        comment.save()
+        if comment_form.is_valid() :
+            comment = comment_form.save(commit=False) 
+            comment.movie = movie
+            comment.save()
         return redirect('movies:detail',movie.pk)
-    return redirect('movies:index')
+    return redirect('accounts:login')
 
+@require_POST
 def comments_delete(request,movie_pk,comment_pk) :
-    comment = get_object_or_404(Comment,pk=comment_pk)
-
-    comment.delete()
-    return redirect('movies:detail',movie_pk)
+    if request.user.is_authenticated :
+        comment = get_object_or_404(Comment,pk=comment_pk)
+        if request.user == comment.user :
+            comment.delete()
+        return redirect('movies:detail',movie_pk)
+    return redirect('accounts:login',movie_pk)
