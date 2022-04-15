@@ -78,13 +78,13 @@ def delete(request,pk) :
 @require_POST
 def comments_create(request,pk) :
     if request.user.is_authenticated : 
-            
         movie = get_object_or_404(Movie,pk=pk)
         comment_form = CommentForm(request.POST)
 
         if comment_form.is_valid() :
             comment = comment_form.save(commit=False) 
             comment.movie = movie
+            comment.user = request.user
             comment.save()
         return redirect('movies:detail',movie.pk)
     return redirect('accounts:login')
