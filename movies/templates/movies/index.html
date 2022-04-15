@@ -4,9 +4,13 @@
 
   <h1>INDEX</h1>
   <h3>hellos</h3>
+  <hr>
+  <a href="{% url 'movies:create' %}">CREATE</a>
+  <hr>
   {% for movie in movies %}
-    {{ movie.title }}
-    {{ movie.description }}
+    title :{{ movie.title }}
+    <br>
+    <a href="{% url 'movies:detail' movie.pk%}"> DETAIL</a>
   {% endfor %}
 
 {% endblock content %}

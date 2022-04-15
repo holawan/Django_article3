@@ -3,9 +3,12 @@
 
 {% block content %}
   <h1>DETAIL</h1>
-
+  <hr>
   title : {{movie.title}}
-  description = {{movie.description}}
+  <br>
+  description :{{movie.description}}
+  <hr>
+  <a href="{% url 'movies:update' movie.pk%}">UPDATE</a>
 {% endblock content %}
 
 
