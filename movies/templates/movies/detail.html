@@ -8,7 +8,7 @@
   <br>
   description :{{movie.description}}
   <hr>
-  <a href="{% url 'movies:update' movie.pk%}">UPDATE</a>
+  <a href="{% url 'movies:update' movie.pk%}" class="btn btn-primary">UPDATE</a>
 
   <h2>댓글 목록 </h2>
   {% for comment in comments %}
@@ -17,7 +17,7 @@
     {% if comment.user == request.user %}
     <form action="{% url 'movies:comments_delete' movie.pk comment.pk %}" method="POST">
       {% csrf_token %}
-      <input type="submit" value="삭제"></form>
+      <input type="submit" value="삭제" class="btn btn-danger"> </form>
     {% endif %}
     <hr>
   {% endfor %}
@@ -29,9 +29,9 @@
   </form>
     <form action="{% url 'movies:delete' movie.pk %}" method="POST">
       {% csrf_token %}
-      <input type="submit" value="삭제">
+      <input type="submit" value="삭제" class="btn btn-danger">
     </form>
-  <a href="{% url 'movies:index' %}">back</a>
+    <a href="{% url 'movies:index' %}" class="btn btn-warning">back</a>
 
 {% endblock content %}
 
