@@ -4,5 +4,9 @@
 
   <h1>INDEX</h1>
   <h3>hellos</h3>
+  {% for movie in movies %}
+    {{ movie.title }}
+    {{ movie.description }}
+  {% endfor %}
 
 {% endblock content %}
