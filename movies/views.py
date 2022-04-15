@@ -45,3 +45,13 @@ def update(request,pk):
     return render(request,'movies/update.html', context)    
 
 
+
+def detail(request,pk) :
+    movie = get_object_or_404(Movie,pk=pk) 
+
+    context = {
+        'movie' :movie
+    }
+
+    return render(request, 'movies/detail.html',context)
+
