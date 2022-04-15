@@ -1,7 +1,7 @@
 from django.shortcuts import get_object_or_404, render, redirect
 
 from movies.forms import MovieForm,CommentForm
-from .models import Movie
+from .models import Movie,Comment
 # Create your views here.
 
 
@@ -59,6 +59,12 @@ def detail(request,pk) :
     return render(request, 'movies/detail.html',context)
 
 
+def delete(request,pk) :
+    movie = get_object_or_404(Movie,pk=pk)
+    movie.delete()
+    return redirect('movies:index')
+
+
 def comments_create(request,pk) :
     movie = get_object_or_404(Movie,pk=pk)
     comment_form = CommentForm(request.POST)
@@ -69,3 +75,9 @@ def comments_create(request,pk) :
         comment.save()
         return redirect('movies:detail',movie.pk)
     return redirect('movies:index')
+
+def comments_delete(request,movie_pk,comment_pk) :
+    comment = get_object_or_404(Comment,pk=comment_pk)
+
+    comment.delete()
+    return redirect('movies:detail',movie_pk)

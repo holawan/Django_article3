@@ -13,6 +13,9 @@
   <h2>댓글 목록 </h2>
   {% for comment in comments %}
     {{comment.content}}
+    <form action="{% url 'movies:comments_delete' movie.pk comment.pk %}">
+      {% csrf_token %}
+      <input type="submit" value="삭제"></form>
     <hr>
   {% endfor %}
   <h3>댓글 쓰기</h3>
@@ -21,7 +24,10 @@
     {{ comment_form }}
     <input type="submit">
   </form>
-
+  <form action="{% url 'movies:delete' movie.pk %}" method="POST">
+    {% csrf_token %}
+    <input type="submit" value="삭제">
+  </form>
   <a href="{% url 'movies:index' %}">back</a>
 
 {% endblock content %}

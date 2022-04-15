@@ -3,6 +3,7 @@ from django.contrib.auth import login as auth_login
 from django.contrib.auth import logout as auth_logout
 from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm
 from .forms import CustomUserChangeForm, CustomUserCreationForm
+from django.contrib.auth import update_session_auth_hash
 # Create your views here.
 
 def login(request):
@@ -54,3 +55,17 @@ def update(request):
         'form':form
     }
     return render(request, 'accounts/update.html', context)
+
+def change_password(request):
+    if request.method=='POST':
+        form = PasswordChangeForm(request.user,request.POST)
+        if form.is_valid():
+            form.save()
+            update_session_auth_hash(request, form.user)
+            return redirect('movies:index')
+    else:
+        form = PasswordChangeForm(request.user)
+    context = {
+        'form':form
+    }
+    return render(request, 'accounts/change_password.html', context)
