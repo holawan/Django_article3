@@ -9,6 +9,15 @@
   description :{{movie.description}}
   <hr>
   <a href="{% url 'movies:update' movie.pk%}">UPDATE</a>
+
+  <h2>댓글 목록 </h2>
+
+  <h3>댓글 쓰기</h3>
+  <form action="{% url 'movies:comments_create' movie.pk %}" method="POST">
+    {% csrf_token %}
+    {{ comment_form }}
+    <input type="submit">
+  </form>
 {% endblock content %}
 
 

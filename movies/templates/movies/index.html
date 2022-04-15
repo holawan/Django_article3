@@ -11,6 +11,7 @@
     title :{{ movie.title }}
     <br>
     <a href="{% url 'movies:detail' movie.pk%}"> DETAIL</a>
+    <hr>
   {% endfor %}
 
 {% endblock content %}
